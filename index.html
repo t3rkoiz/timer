@@ -3,46 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Timer</title>
+    <title>Enhanced Timer</title>
     <style>
         /* Basic styling for the timer and inputs */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
             margin: 0;
-            background-color: #f0f0f0;
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            color: #333;
         }
+
         h1 {
-            font-size: 3em;
+            font-size: 4em;
+            margin-bottom: 20px;
+            background: -webkit-linear-gradient(#00c6ff, #0072ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .timer-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
             margin-bottom: 20px;
         }
+
         input {
-            width: 60px;
+            width: 80px;
             padding: 10px;
-            margin: 5px;
-            font-size: 1em;
+            font-size: 1.2em;
             text-align: center;
+            border: 2px solid #0072ff;
+            border-radius: 10px;
+            outline: none;
+            transition: border-color 0.3s ease;
         }
+
+        input:focus {
+            border-color: #00c6ff;
+        }
+
         button {
-            padding: 10px 20px;
-            font-size: 1em;
+            padding: 15px 30px;
+            font-size: 1.2em;
             cursor: pointer;
-            background-color: #4CAF50;
+            background-color: #0072ff;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+            box-shadow: 0px 4px 15px rgba(0, 114, 255, 0.3);
+        }
+
+        button:hover {
+            background-color: #00c6ff;
+        }
+
+        button:active {
+            background-color: #0057e7;
         }
     </style>
 </head>
 <body>
     <h1 id="timer">00:00:00</h1>
-    <input type="number" id="hours" placeholder="Hours">
-    <input type="number" id="minutes" placeholder="Minutes">
-    <input type="number" id="seconds" placeholder="Seconds">
+    <div class="timer-container">
+        <input type="number" id="hours" placeholder="Hours" min="0">
+        <input type="number" id="minutes" placeholder="Minutes" min="0">
+        <input type="number" id="seconds" placeholder="Seconds" min="0">
+    </div>
     <button onclick="startTimer()">Start Timer</button>
 
     <script>
