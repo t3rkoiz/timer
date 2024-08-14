@@ -84,37 +84,45 @@
         <input type="number" id="seconds" placeholder="Seconds" min="0">
     </div>
     <div class="button-container">
-        <button onclick="startTimer()">Start Timer</button>
+        <button onclick="resumeTimer()">Resume Timer</button>
         <button onclick="stopTimer()">Stop Timer</button>
     </div>
 
     <script>
         let interval;
+        let totalSeconds = 0;
+        let isRunning = false;
 
         function startTimer() {
-            clearInterval(interval); // Clear any existing interval to reset the timer
             var hours = parseInt(document.getElementById('hours').value) || 0;
             var minutes = parseInt(document.getElementById('minutes').value) || 0;
             var seconds = parseInt(document.getElementById('seconds').value) || 0;
-            var totalSeconds = hours * 3600 + minutes * 60 + seconds;
-            var timerDisplay = document.getElementById('timer');
+            totalSeconds = hours * 3600 + minutes * 60 + seconds;
+            resumeTimer();
+        }
 
-            interval = setInterval(function() {
-                var h = Math.floor(totalSeconds / 3600);
-                var m = Math.floor((totalSeconds % 3600) / 60);
-                var s = totalSeconds % 60;
-                timerDisplay.textContent = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        function resumeTimer() {
+            if (!isRunning && totalSeconds > 0) {
+                isRunning = true;
+                interval = setInterval(function() {
+                    var h = Math.floor(totalSeconds / 3600);
+                    var m = Math.floor((totalSeconds % 3600) / 60);
+                    var s = totalSeconds % 60;
+                    document.getElementById('timer').textContent = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
 
-                if (totalSeconds <= 0) {
-                    clearInterval(interval);
-                }
+                    if (totalSeconds <= 0) {
+                        clearInterval(interval);
+                        isRunning = false;
+                    }
 
-                totalSeconds--;
-            }, 1000);
+                    totalSeconds--;
+                }, 1000);
+            }
         }
 
         function stopTimer() {
-            clearInterval(interval); // Stop the timer
+            clearInterval(interval);
+            isRunning = false;
         }
     </script>
 </body>
