@@ -84,14 +84,26 @@
         <input type="number" id="seconds" placeholder="Seconds" min="0">
     </div>
     <div class="button-container">
-        <button onclick="resumeTimer()">Resume Timer</button>
+        <button id="startResumeButton" onclick="startResumeTimer()">Start Timer</button>
         <button onclick="stopTimer()">Stop Timer</button>
+        <button onclick="clearTimer()">Clear Timer</button>
     </div>
 
     <script>
         let interval;
         let totalSeconds = 0;
         let isRunning = false;
+        let isStarted = false;
+
+        function startResumeTimer() {
+            if (!isStarted) {
+                startTimer();
+                isStarted = true;
+                document.getElementById('startResumeButton').textContent = 'Resume Timer';
+            } else if (!isRunning) {
+                resumeTimer();
+            }
+        }
 
         function startTimer() {
             var hours = parseInt(document.getElementById('hours').value) || 0;
@@ -123,6 +135,17 @@
         function stopTimer() {
             clearInterval(interval);
             isRunning = false;
+        }
+
+        function clearTimer() {
+            stopTimer(); // Stop the timer
+            totalSeconds = 0;
+            document.getElementById('timer').textContent = "00:00:00"; // Reset the display
+            document.getElementById('hours').value = ""; // Clear input fields
+            document.getElementById('minutes').value = "";
+            document.getElementById('seconds').value = "";
+            isStarted = false; // Reset the start state
+            document.getElementById('startResumeButton').textContent = 'Start Timer'; // Reset button text
         }
     </script>
 </body>
