@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced Timer</title>
+    <title>Persistent Timer</title>
     <style>
-        /* Basic styling for the timer and inputs */
         body {
             font-family: 'Roboto', sans-serif;
             display: flex;
@@ -95,6 +94,33 @@
         let isRunning = false;
         let isStarted = false;
 
+        // Load the timer state from localStorage
+        function loadTimerState() {
+            const savedTime = localStorage.getItem('totalSeconds');
+            const savedStartTime = localStorage.getItem('startTime');
+            const now = new Date().getTime();
+
+            if (savedTime && savedStartTime) {
+                const timeElapsed = Math.floor((now - savedStartTime) / 1000);
+                totalSeconds = Math.max(0, savedTime - timeElapsed);
+                if (totalSeconds > 0) {
+                    resumeTimer();
+                    isStarted = true;
+                    document.getElementById('startResumeButton').textContent = 'Resume Timer';
+                }
+            }
+        }
+
+        function saveTimerState() {
+            localStorage.setItem('totalSeconds', totalSeconds);
+            localStorage.setItem('startTime', new Date().getTime());
+        }
+
+        function clearTimerState() {
+            localStorage.removeItem('totalSeconds');
+            localStorage.removeItem('startTime');
+        }
+
         function startResumeTimer() {
             if (!isStarted) {
                 startTimer();
@@ -110,6 +136,7 @@
             var minutes = parseInt(document.getElementById('minutes').value) || 0;
             var seconds = parseInt(document.getElementById('seconds').value) || 0;
             totalSeconds = hours * 3600 + minutes * 60 + seconds;
+            saveTimerState();
             resumeTimer();
         }
 
@@ -124,10 +151,12 @@
 
                     if (totalSeconds <= 0) {
                         clearInterval(interval);
+                        clearTimerState();
                         isRunning = false;
+                    } else {
+                        totalSeconds--;
+                        saveTimerState();
                     }
-
-                    totalSeconds--;
                 }, 1000);
             }
         }
@@ -144,9 +173,13 @@
             document.getElementById('hours').value = ""; // Clear input fields
             document.getElementById('minutes').value = "";
             document.getElementById('seconds').value = "";
+            clearTimerState();
             isStarted = false; // Reset the start state
             document.getElementById('startResumeButton').textContent = 'Start Timer'; // Reset button text
         }
+
+        // Load the timer state when the page loads
+        loadTimerState();
     </script>
 </body>
 </html>
